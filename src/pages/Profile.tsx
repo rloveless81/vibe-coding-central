@@ -34,7 +34,7 @@ const Profile = () => {
       toast({
         title: "Development Mode",
         description: "File uploads are limited with placeholder credentials.",
-        variant: "warning"
+        variant: "default"
       });
       return;
     }
@@ -75,7 +75,7 @@ const Profile = () => {
       <div className="container py-8 px-4 md:px-6">
         <div className="max-w-md mx-auto">
           {isUsingDefaultCredentials && (
-            <Alert variant="warning" className="mb-4">
+            <Alert className="mb-4">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Development Mode</AlertTitle>
               <AlertDescription>

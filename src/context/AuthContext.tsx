@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         toast({
           title: "Development Mode",
           description: "Authentication is limited with placeholder credentials.",
-          variant: "warning"
+          variant: "default"
         });
         return;
       }
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         toast({
           title: "Development Mode",
           description: "Authentication is limited with placeholder credentials.",
-          variant: "warning"
+          variant: "default"
         });
         return;
       }
