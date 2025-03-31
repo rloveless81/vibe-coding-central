@@ -10,8 +10,6 @@ import { Input } from '@/components/ui/input';
 import { uploadFile, getFileUrl } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 import { isUsingDefaultCredentials } from '@/lib/supabase';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 
 const Profile = () => {
   const { user, signOut } = useAuth();
@@ -29,15 +27,6 @@ const Profile = () => {
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    
-    if (isUsingDefaultCredentials) {
-      toast({
-        title: "Development Mode",
-        description: "File uploads are limited with placeholder credentials.",
-        variant: "default"
-      });
-      return;
-    }
     
     const file = e.target.files[0];
     const fileExt = file.name.split('.').pop();
@@ -74,17 +63,6 @@ const Profile = () => {
     <PageLayout>
       <div className="container py-8 px-4 md:px-6">
         <div className="max-w-md mx-auto">
-          {isUsingDefaultCredentials && (
-            <Alert className="mb-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Development Mode</AlertTitle>
-              <AlertDescription>
-                You're using placeholder Supabase credentials. Some features may be limited.
-                To enable full functionality, set the VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.
-              </AlertDescription>
-            </Alert>
-          )}
-          
           <Card>
             <CardHeader>
               <CardTitle>Profile</CardTitle>
@@ -109,7 +87,7 @@ const Profile = () => {
                     accept="image/*" 
                     className="hidden" 
                     onChange={handleAvatarUpload}
-                    disabled={uploading || isUsingDefaultCredentials}
+                    disabled={uploading}
                   />
                 </div>
               </div>

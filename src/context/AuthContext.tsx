@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase, isUsingDefaultCredentials } from '@/lib/supabase';
@@ -22,14 +23,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Display warning toast if using default credentials
-    if (import.meta.env.DEV && isUsingDefaultCredentials) {
-      sonnerToast.warning(
-        "Development Mode",
-        "Using placeholder Supabase credentials. Set VITE_SUPABASE_ANON_KEY for full functionality."
-      );
-    }
-
+    // Since we're now using actual credentials, we don't need to display warnings
+    
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -49,16 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    try {
-      if (isUsingDefaultCredentials) {
-        toast({
-          title: "Development Mode",
-          description: "Authentication is limited with placeholder credentials.",
-          variant: "default"
-        });
-        return;
-      }
-      
+    try {      
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast({
@@ -75,16 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string) => {
-    try {
-      if (isUsingDefaultCredentials) {
-        toast({
-          title: "Development Mode",
-          description: "Authentication is limited with placeholder credentials.",
-          variant: "default"
-        });
-        return;
-      }
-      
+    try {      
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
       toast({
