@@ -1,14 +1,18 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Menu, X, Github } from "lucide-react";
+import { Moon, Sun, Menu, X, User } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
+  const { user, signOut } = useAuth();
 
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
@@ -22,6 +26,11 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    setIsMenuOpen(false);
   };
 
   const navLinks = [
@@ -69,17 +78,36 @@ const Navbar = () => {
             <span className="sr-only">Toggle theme</span>
           </Button>
           
-          <Link to="/login">
-            <Button variant="outline" size="sm" className="hidden md:flex">
-              Login
-            </Button>
-          </Link>
-          
-          <Link to="/signup">
-            <Button size="sm" className="hidden md:flex bg-primary hover:bg-primary/90">
-              Sign Up
-            </Button>
-          </Link>
+          {user ? (
+            <div className="hidden md:flex items-center gap-2">
+              <Link to="/profile">
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Avatar className="h-6 w-6">
+                    <AvatarFallback>{user.email?.substring(0, 2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <span>Profile</span>
+                </Button>
+              </Link>
+              
+              <Button size="sm" variant="ghost" onClick={handleSignOut}>
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center gap-2">
+              <Link to="/login">
+                <Button variant="outline" size="sm">
+                  Login
+                </Button>
+              </Link>
+              
+              <Link to="/signup">
+                <Button size="sm" className="bg-primary hover:bg-primary/90">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          )}
 
           <Button
             variant="ghost"
@@ -106,18 +134,40 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <div className="flex gap-2 pt-2">
-              <Link to="/login" className="flex-1">
-                <Button variant="outline" size="sm" className="w-full">
-                  Login
+            
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="px-2 py-1 text-sm font-medium flex items-center gap-2"
+                  onClick={toggleMenu}
+                >
+                  <User className="h-4 w-4" />
+                  Profile
+                </Link>
+                <Button 
+                  variant="destructive" 
+                  size="sm" 
+                  className="mt-2"
+                  onClick={handleSignOut}
+                >
+                  Sign Out
                 </Button>
-              </Link>
-              <Link to="/signup" className="flex-1">
-                <Button size="sm" className="w-full">
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
+              </>
+            ) : (
+              <div className="flex gap-2 pt-2">
+                <Link to="/login" className="flex-1" onClick={toggleMenu}>
+                  <Button variant="outline" size="sm" className="w-full">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/signup" className="flex-1" onClick={toggleMenu}>
+                  <Button size="sm" className="w-full">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
           </nav>
         </div>
       )}
