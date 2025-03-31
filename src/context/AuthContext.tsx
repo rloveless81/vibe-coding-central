@@ -1,8 +1,9 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { supabase, isUsingDefaultCredentials } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
+import { toast as sonnerToast } from 'sonner';
 
 type AuthContextType = {
   user: User | null;
@@ -22,6 +23,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Display warning toast if using default credentials
+    if (import.meta.env.DEV && isUsingDefaultCredentials) {
+      sonnerToast.warning(
+        "Development Mode",
+        "Using placeholder Supabase credentials. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY for full functionality."
+      );
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -42,6 +51,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
+      if (isUsingDefaultCredentials) {
+        toast({
+          title: "Development Mode",
+          description: "Authentication is limited with placeholder credentials.",
+          variant: "warning"
+        });
+        return;
+      }
+      
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast({
@@ -59,6 +77,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     try {
+      if (isUsingDefaultCredentials) {
+        toast({
+          title: "Development Mode",
+          description: "Authentication is limited with placeholder credentials.",
+          variant: "warning"
+        });
+        return;
+      }
+      
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
       toast({
