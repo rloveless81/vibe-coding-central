@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase, isUsingDefaultCredentials } from '@/lib/supabase';
@@ -27,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (import.meta.env.DEV && isUsingDefaultCredentials) {
       sonnerToast.warning(
         "Development Mode",
-        "Using placeholder Supabase credentials. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY for full functionality."
+        "Using placeholder Supabase credentials. Set VITE_SUPABASE_ANON_KEY for full functionality."
       );
     }
 
