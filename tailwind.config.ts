@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Vibe Coding custom colors
+				vibe: {
+					purple: '#8A2BE2',
+					pink: '#FF69B4',
+					blue: '#1E90FF',
+					green: '#32CD32',
+					orange: '#FFA500',
+					yellow: '#FFD700',
 				}
 			},
 			borderRadius: {
@@ -84,12 +94,31 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'pulse-soft': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.7' }
+				},
+				'gradient-shift': {
+					'0%': { backgroundPosition: '0% 50%' },
+					'50%': { backgroundPosition: '100% 50%' },
+					'100%': { backgroundPosition: '0% 50%' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float': 'float 6s ease-in-out infinite',
+				'pulse-soft': 'pulse-soft 4s ease-in-out infinite',
+				'gradient-shift': 'gradient-shift 10s ease infinite'
+			},
+			backgroundImage: {
+				'gradient-vibe': 'linear-gradient(45deg, var(--vibe-purple), var(--vibe-blue), var(--vibe-pink))',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
